@@ -1,8 +1,10 @@
 /*---------------------------------------------------
-    LESS Elements 0.9
+    LESS Mixins 1.0
   ---------------------------------------------------
     A set of useful LESS mixins
-    More info at: http://lesselements.com
+    https://github.com/aMahmoodi/elements
+  ---------------------------------------------------
+    This is a fork of https://github.com/dmitryf/elements
   ---------------------------------------------------*/
 
 .gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
@@ -55,20 +57,12 @@
   -moz-border-radius: @radius;
   border-radius: @radius;
 }
-.border-radius(@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0) {
-  -webkit-border-top-right-radius: @topright;
-  -webkit-border-bottom-right-radius: @bottomright;
-  -webkit-border-bottom-left-radius: @bottomleft;
-  -webkit-border-top-left-radius: @topleft;
-  -moz-border-radius-topright: @topright;
-  -moz-border-radius-bottomright: @bottomright;
-  -moz-border-radius-bottomleft: @bottomleft;
-  -moz-border-radius-topleft: @topleft;
-  border-top-right-radius: @topright;
-  border-bottom-right-radius: @bottomright;
-  border-bottom-left-radius: @bottomleft;
-  border-top-left-radius: @topleft;
-  .background-clip(padding-box);
+.border-radius (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+
+  .background-clip(padding);
 }
 .opacity(@opacity: 0.5) {
   -moz-opacity: @opacity;
@@ -98,21 +92,28 @@
 .scale(@ratio:1.5){
   .transform(scale(@ratio));
 }
-.transition(@duration:0.2s, @ease:ease-out) {
-  -webkit-transition: all @duration @ease;
-  -moz-transition: all @duration @ease;
-  -o-transition: all @duration @ease;
-  transition: all @duration @ease;
+.transition(@value1,@value2:X,...)
+{
+    @value: ~`"@{arguments}".replace(/[\[\]]|\,\sX/g, '')`;
+
+    -webkit-transition: @value;
+    -moz-transition: @value;
+    -o-transition: @value;
+    transition: @value;  
 }
 .inner-shadow(@horizontal:0, @vertical:1px, @blur:2px, @alpha: 0.4) {
   -webkit-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
   -moz-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
   box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
 }
-.box-shadow(@arguments) {
-  -webkit-box-shadow: @arguments;
-  -moz-box-shadow: @arguments;
-  box-shadow: @arguments;
+.box-shadow (@value1,@value2:X,...)
+{
+    @value: ~`"@{arguments}".replace(/[\[\]]|\,\sX/g, '')`;
+
+    -webkit-box-shadow: @value;
+    -moz-box-shadow: @value;
+    box-shadow: @value;
+ 
 }
 .box-sizing(@sizing: border-box) {
   -ms-box-sizing: @sizing;
@@ -149,8 +150,8 @@
 .translate(@x:0, @y:0) {
   .transform(translate(@x, @y));
 }
-.background-clip(@argument: padding-box) {
+.background-clip(@argument: padding) {
   -moz-background-clip: @argument;
   -webkit-background-clip: @argument;
-  background-clip: @argument;
+  background-clip: ~"@{argument}-box";
 }
